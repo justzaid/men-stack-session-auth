@@ -20,13 +20,15 @@ mongoose.connection.on('connected', () => {
 
 const pagesCtrl = require('./controllers/pages')
 
+const authCtrl = require('./controllers/auth')
+
 // Middleware
 
 app.use(express.static(path.join(__dirname, "public")));
 
 // Route handlers
 app.get('/', pagesCtrl.home)
-
+app.get('/auth/sign-up', authCtrl.signUp)
 
 app.listen(port, () => {
     console.log(`The express app is ready on port ${port}`)
