@@ -46,15 +46,36 @@ const signIn = async (req, res) => {
             msg: 'Invalid credentials, please try again.'
         })
     }
-    const validPassword = bcrypt.compareSync(
+    const validPassword = bcrypt.compareSync (
         req.body.password,
         userInDatabase.password
     )
+    if (!validPassword) {
+        return res.render('auth/signin.ejs', {
+            title: 'Sign in',
+            msg: 'Invalid credentials, please try again.'
+        })
+    }
+    
+    req.session.user = {
+        username: userInDatabase.username,
+    }
+    console.log('red.session: ', req.session)
+
+    res.redirect('/')
+}
+
+const signOut = (req, res) => {
+    req.session.destroy(() => {
+        res.clearCookie('connect.sid')
+        res.redirect('/')
+    })
 }
 
 module.exports = {
     signUp,
     addUser,
     signInForm,
-    signIn
+    signIn,
+    signOut,
 }
