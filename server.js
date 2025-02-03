@@ -1,5 +1,4 @@
 // Require
-
 require('dotenv').config()
 const express = require('express')
 const app = express()
@@ -10,6 +9,9 @@ const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const morgan = require('morgan')
 const path = require('path')
+const isSignedIn = require('./middleware/is-signed-in')
+const passUserToView = require('./middleware/pass-user-to-view')
+
 const port = process.env.PORT ? process.env.PORT : '3000'
 
 // Creates a connection in MongoDB Database
@@ -19,8 +21,8 @@ mongoose.connection.on('connected', () => {
     console.log(`Connected to MongoDB Database ${mongoose.connection.name}`)
 })
 
-// Controllers
 
+// Controllers
 const pagesCtrl = require('./controllers/pages')
 const authCtrl = require('./controllers/auth')
 const vipCtrl = require('./controllers/vip')
@@ -42,6 +44,7 @@ app.use(session({
         secure: false,
     }
 }))
+app.use(passUserToView)
 
 // Route handlers
 app.get('/', pagesCtrl.home)
@@ -50,7 +53,7 @@ app.post('/auth/sign-up', authCtrl.addUser)
 app.get('/auth/sign-in', authCtrl.signInForm)
 app.post('/auth/sign-in', authCtrl.signIn)
 app.get('/auth/sign-out', authCtrl.signOut)
-app.get('/vip-lounge', vipCtrl.welcome)
+app.get('/vip-lounge', isSignedIn, vipCtrl.welcome)
 
 
 app.listen(port, () => {

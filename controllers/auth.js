@@ -27,7 +27,13 @@ const addUser = async (req, res) => {
     req.body.password = hashedPassword
 
     const user = await User.create(req.body)
-    console.log('New user: ', user)
+    
+    req.session.user = {
+        username: user.username,
+    }
+    req.session.save(() => {
+        res.redirect('/')
+    })
 }
 
 const signInForm = (req, res) => {
@@ -56,15 +62,13 @@ const signIn = async (req, res) => {
             msg: 'Invalid credentials, please try again.'
         })
     }
-    
+
     req.session.user = {
         username: userInDatabase.username,
     }
     req.session.save(() => {
         res.redirect('/')
     })
-
-    res.redirect('/')
 }
 
 const signOut = (req, res) => {
