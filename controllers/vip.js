@@ -1,6 +1,6 @@
 const welcome = (req, res) => {
     if (req.session.user) {
-        res.send(`Welcome to the part ${req.session.user.username}`)
+        res.send(`Welcome to the party ${req.session.user.username}`)
     } else {
         res.send('Sorry, no guests allowed.')
     }

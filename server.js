@@ -4,6 +4,8 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const session = require('express-session')
+const MongoStore = require('connect-mongo')
+
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 const morgan = require('morgan')
@@ -30,6 +32,15 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URI,
+        ttl: 7 * 24 * 60 * 60 // 1 week in seconds
+    }),
+    cookie: {
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week in milliseconds
+        httpOnly: true,
+        secure: false,
+    }
 }))
 
 // Route handlers
