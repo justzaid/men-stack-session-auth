@@ -1,9 +1,9 @@
 <%- include('../partials/head') %>
 <div class="container">
 
-    <h1>Create a new account</h1>
+    <h1>Sign in to your account</h1>
     
-    <form action="/auth/sign-up" method="POST">
+    <form action="/auth/sign-in" method="POST">
         
         <label for="username">Username: </label>
         <input type="username" name="username">
@@ -11,10 +11,7 @@
         <label for="password">Password: </label>
         <input type="password" name="password">
         
-        <label for="confirmPassword">Confirm Password: </label>
-        <input type="password" name="confirmPassword">
-        
-        <button type="submit" class="btn btn-primary">Sign up</button>
+        <button type="submit" class="btn btn-primary">Sign in</button>
         
         <p><%= msg %></p>
     </form>

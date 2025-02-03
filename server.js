@@ -23,12 +23,15 @@ const pagesCtrl = require('./controllers/pages')
 const authCtrl = require('./controllers/auth')
 
 // Middleware
-
+app.use(express.urlencoded({ extended: false}))
 app.use(express.static(path.join(__dirname, "public")));
 
 // Route handlers
 app.get('/', pagesCtrl.home)
 app.get('/auth/sign-up', authCtrl.signUp)
+app.post('/auth/sign-up', authCtrl.addUser)
+app.get('/auth/sign-in', authCtrl.signInForm)
+app.post('/auth/sign-in', authCtrl.signIn)
 
 app.listen(port, () => {
     console.log(`The express app is ready on port ${port}`)
